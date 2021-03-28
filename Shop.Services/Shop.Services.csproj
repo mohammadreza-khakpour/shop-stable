@@ -4,4 +4,17 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="AccountingDocuments\Exceptions\" />
+    <Folder Include="ProductEntries\Exceptions\" />
+    <Folder Include="SalesCheckLists\Exceptions\" />
+    <Folder Include="SalesItems\Exceptions\" />
+    <Folder Include="Warehouses\Exceptions\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Shop.Entities\Shop.Entities.csproj" />
+    <ProjectReference Include="..\Shop.Infrastructure\Shop.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
