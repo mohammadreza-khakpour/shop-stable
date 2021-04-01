@@ -18,31 +18,12 @@ namespace Shop.Services.AccountingDocuments
             _accountingDocumentRepository = accountingDocumentRepository;
             _unitOfWork = unitOfWork;
         }
-        public int Add(AddAccountingDocumentDto dto)
+        public void Add(int checklistId)
         {
-            AccountingDocument accountingDoc = new AccountingDocument()
-            {
-                CreationDate = dto.CreationDate,
-                SalesCheckListId = dto.SalesCheckListId,
-                SerialNumber = dto.SerialNumber
-            };
-            var recordId = _accountingDocumentRepository.Add(accountingDoc);
-            _unitOfWork.Complete();
-            return recordId;
-        }
-        public void Update(int id, UpdateAccountingDocumentDto dto)
-        {
-            var foundedItem = _accountingDocumentRepository.Find(id);
-            foundedItem.CreationDate = dto.CreationDate;
-            foundedItem.SalesCheckListId = dto.SalesCheckListId;
-            foundedItem.SerialNumber = dto.SerialNumber;
+            _accountingDocumentRepository.Add(checklistId);
             _unitOfWork.Complete();
         }
-        public void Delete(int id)
-        {
-            _accountingDocumentRepository.Delete(id);
-            _unitOfWork.Complete();
-        }
+
         public List<GetAccountingDocumentDto> GetAll()
         {
             return _accountingDocumentRepository.GetAll();

@@ -1,4 +1,5 @@
-﻿using Shop.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Shop.Entities;
 using Shop.Services.Warehouses.Contracts;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace Shop.Persistence.EF.Warehouses
         {
             _dbContext = dbContext;
         }
+
         public int Add(int productCount, int productId)
         {
             Warehouse wr = new Warehouse
@@ -91,7 +93,29 @@ namespace Shop.Persistence.EF.Warehouses
                 product.IsSufficientInStore = false;
             }
         }
-
+        public void ForAllChecklistItemsManageWarehousesAgain(int id)
+        {
+            var CheckListsToPerformQuery = _dbContext.SalesCheckLists.Include(_ => _.Items);
+            SalesCheckList theChecklist = CheckListsToPerformQuery.First(_ => _.Id == id);
+            theChecklist.Items.ToList().ForEach(salesItem =>
+            {
+                ManageWarehousesAgain(-salesItem.ProductCount, salesItem.ProductId);
+            });
+        }
+        public void ManageWarehousesAgain(int countDiffer, int productId)
+        {
+            if (countDiffer < 0)
+            {
+                Warehouse warehouse = FindWarehouseWithProperAmount(countDiffer, productId);
+                warehouse.ProductCount += countDiffer;
+            }
+            if (countDiffer > 0)
+            {
+                Warehouse warehouse = FindTheFirstWarehouse(productId);
+                warehouse.ProductCount += countDiffer;
+            }
+            CheckIfProductAmountIsSufficient(productId);
+        }
         private Warehouse FindWarehouseWithProperAmount(int AtleastAmount, int productId)
         {
             try
@@ -107,31 +131,19 @@ namespace Shop.Persistence.EF.Warehouses
             }
 
         }
-
-
         private Warehouse FindTheFirstWarehouse(int productId)
         {
             return _dbContext.Warehouses.First(_ => _.ProductId == productId);
         }
-
-        public void ManageWarehousesAgain(int countDiffer, int productId)
-        {
-            if (countDiffer < 0)
-            {
-                Warehouse warehouse = FindWarehouseWithProperAmount(countDiffer, productId);
-                warehouse.ProductCount += countDiffer;
-            }
-            if (countDiffer > 0)
-            {
-                Warehouse warehouse = FindTheFirstWarehouse(productId);
-                warehouse.ProductCount += countDiffer;
-            }
-        }
-
         public void MinusDeletedAmount(int ProductId, int ProductCount)
         {
             Warehouse warehouse = FindWarehouseWithProperAmount(ProductCount, ProductId);
             warehouse.ProductCount -= ProductCount;
+        }
+
+        public void AddToItemCount(int itemId, int count)
+        {
+            _dbContext.Warehouses.First(c => c.ProductId == itemId).ProductCount += count;
         }
 
     }

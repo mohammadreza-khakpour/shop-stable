@@ -34,7 +34,7 @@ namespace Shop.Services.ProductEntries
             _unitOfWork.Complete();
             return record.Id;
         }
-        public void Update(int id, UpdateProductEntryDto dto)
+        public int Update(int id, UpdateProductEntryDto dto)
         {
             var foundedItem = _productEntryRepository.Find(id);
 
@@ -43,9 +43,8 @@ namespace Shop.Services.ProductEntries
             foundedItem.EntrySerialNumber = dto.EntrySerialNumber;
             int countDiffer = dto.ProductCount - foundedItem.ProductCount;
             foundedItem.ProductCount = dto.ProductCount;
-            _warehouseRepository.ManageWarehousesAgain(countDiffer, foundedItem.ProductId);
-            _warehouseRepository.CheckIfProductAmountIsSufficient(foundedItem.ProductId);
             _unitOfWork.Complete();
+            return countDiffer;
         }
         public void Delete(int id)
         {

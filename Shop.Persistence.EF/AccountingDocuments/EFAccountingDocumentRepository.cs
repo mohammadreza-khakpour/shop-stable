@@ -15,16 +15,34 @@ namespace Shop.Persistence.EF.AccountingDocuments
             _dBContext = dBContext;
         }
 
-        public int Add(AccountingDocument accountingDocument)
+        public void Add(int checklistId)
         {
-            var result = _dBContext.AccountingDocuments.Add(accountingDocument);
-            return result.Entity.Id;
+            SalesCheckList theCheckList = _dBContext.SalesCheckLists.Find(checklistId);
+            string randomSerialNumber = MakeRandomString(9);
+            AccountingDocument accountingDocument = new AccountingDocument()
+            {
+                CreationDate = theCheckList.RecordDate,
+                SalesCheckListId = theCheckList.Id,
+                SerialNumber = randomSerialNumber,
+                SalesCheckListOverallPrice = theCheckList.OverAllProductPrice,
+                SalesCheckListSerialNumber = theCheckList.SerialNumber
+            };
+            _dBContext.AccountingDocuments.Add(accountingDocument);
         }
-
-        public void Delete(int id)
+        private string MakeRandomString(int size, bool lowerCase = false)
         {
-            var accountingDocument = Find(id);
-            _dBContext.AccountingDocuments.Remove(accountingDocument);
+            DateTime rightNow = new DateTime();
+            Random _random = new Random();
+            var builder = new StringBuilder(size);
+            char offset = lowerCase ? 'a' : 'A';
+            const int lettersOffset = 26;
+            for (var i = 0; i < size; i++)
+            {
+                var @char = (char)_random.Next(offset, offset + lettersOffset);
+                builder.Append(@char);
+            }
+            return lowerCase ? builder.ToString().ToLower() + rightNow.ToLongTimeString() :
+                builder.ToString() + rightNow.ToLongTimeString();
         }
         public AccountingDocument Find(int id)
         {
@@ -37,7 +55,9 @@ namespace Shop.Persistence.EF.AccountingDocuments
                 Id = _.Id,
                 CreationDate = _.CreationDate,
                 SalesCheckListId = _.SalesCheckListId,
-                SerialNumber = _.SerialNumber
+                SerialNumber = _.SerialNumber,
+                SalesCheckListOverallPrice = _.SalesCheckListOverallPrice,
+                SalesCheckListSerialNumber = _.SalesCheckListSerialNumber
             }).ToList();
         }
 
@@ -49,7 +69,9 @@ namespace Shop.Persistence.EF.AccountingDocuments
                 Id = theAccountingDocument.Id,
                 CreationDate = theAccountingDocument.CreationDate,
                 SalesCheckListId = theAccountingDocument.SalesCheckListId,
-                SerialNumber = theAccountingDocument.SerialNumber
+                SerialNumber = theAccountingDocument.SerialNumber,
+                SalesCheckListOverallPrice = theAccountingDocument.SalesCheckListOverallPrice,
+                SalesCheckListSerialNumber = theAccountingDocument.SalesCheckListSerialNumber
             };
         }
     }
