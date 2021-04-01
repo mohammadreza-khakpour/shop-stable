@@ -31,7 +31,8 @@ namespace Shop.Persistence.EF.AccountingDocuments
         }
         private string MakeRandomString(int size, bool lowerCase = false)
         {
-            DateTime rightNow = new DateTime();
+            //DateTime rightNow = new DateTime();
+            DateTime rightNow = DateTime.Now;
             Random _random = new Random();
             var builder = new StringBuilder(size);
             char offset = lowerCase ? 'a' : 'A';

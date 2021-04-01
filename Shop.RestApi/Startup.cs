@@ -67,6 +67,7 @@ namespace Shop.RestApi
             services.AddSingleton<EFDataContext>();
 
             services.AddSingleton<UnitOfWork, EFUnitOfWork>();
+
             services.AddControllers();
         }
 

@@ -42,7 +42,7 @@ namespace Shop.Services.Warehouses
             SalesCheckList checklist = _salesCheckListRepository.FindWithItems(checklistId);
             foreach (var item in checklist.Items)
             {
-                _warehouseRepository.AddToItemCount(item.Id, item.ProductCount);
+                _warehouseRepository.AddToItemCount(item.ProductId, item.ProductCount);
 
             }
         }
