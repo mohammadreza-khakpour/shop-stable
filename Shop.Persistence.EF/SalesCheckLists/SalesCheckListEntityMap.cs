@@ -13,6 +13,9 @@ namespace Shop.Persistence.EF.SalesCheckLists
         {
             builder.HasKey(_ => _.Id);
             builder.Property(_ => _.SerialNumber).HasMaxLength(20);
+            builder.Property(_ => _.CustomerFullName).HasMaxLength(50);
+            builder.Property(_ => _.OverAllProductCount);
+            builder.Property(_ => _.OverAllProductPrice);
             builder.Property(_ => _.RecordDate);
         }
     }

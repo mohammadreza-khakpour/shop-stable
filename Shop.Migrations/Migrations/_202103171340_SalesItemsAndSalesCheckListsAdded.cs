@@ -21,11 +21,16 @@ namespace Shop.Migrations.Migrations
             Create.Table("SalesCheckLists")
                 .WithColumn("Id").AsInt32().PrimaryKey().Identity()
                 .WithColumn("SerialNumber").AsString(20).Unique()
+                .WithColumn("CustomerFullName").AsString(50)
+                .WithColumn("OverAllProductCount").AsInt32()
+                .WithColumn("OverAllProductPrice").AsDouble()
                 .WithColumn("RecordDate").AsDateTime();
 
             Create.Table("SalesItems")
                 .WithColumn("Id").AsInt32().PrimaryKey().Identity()
                 .WithColumn("ProductCount").AsInt32().NotNullable()
+                .WithColumn("ProductCode").AsString(10)
+                .WithColumn("ProductPrice").AsDouble()
                 .WithColumn("ProductId").AsInt32()
                 .ForeignKey("FK_SalesItems_Products", "Products", "Id")
                 .OnDelete(System.Data.Rule.None)

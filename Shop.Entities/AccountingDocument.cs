@@ -11,5 +11,7 @@ namespace Shop.Entities
         public string SerialNumber { get; set; }
         public int SalesCheckListId { get; set; }
         public SalesCheckList SalesCheckList { get; set; }
+        public string SalesCheckListSerialNumber { get; set; }
+        public double SalesCheckListOverallPrice { get; set; }
     }
 }
