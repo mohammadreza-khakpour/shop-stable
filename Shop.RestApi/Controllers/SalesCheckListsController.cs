@@ -50,6 +50,7 @@ namespace Shop.RestApi.Controllers
         {
             _warehouseService.PrepareWarehousesForChecklistUpdate(id);
             int CheckListId = _service.Update(id, dto);
+            _warehouseService.ForAllChecklistItemsManageWarehousesAgain(CheckListId);
             _accountingService.Add(CheckListId);
         }
         [HttpDelete("{id}")]
